@@ -1,101 +1,48 @@
-[![Build Digifiz Next](https://github.com/Sgw32/DigifizReplica/actions/workflows/build_main.yml/badge.svg)](https://github.com/Sgw32/DigifizReplica/actions/workflows/build_main.yml)
+# Ember
 
-[![Build Digifiz Replica Arduino](https://github.com/Sgw32/DigifizReplica/actions/workflows/build_legacy_arduino.yml/badge.svg)](https://github.com/Sgw32/DigifizReplica/actions/workflows/build_legacy_arduino.yml)
+Ember is an ESP32-based RPM and speedometer converter with Wi-Fi configuration and firmware updates. It samples the two analog input paths and measures the fundamental frequency of their conditioned pulse signals, providing a small foundation for converting those measurements into vehicle-specific outputs.
 
-# Official Digifiz Replica repository
+## Current scope
 
-![Digifiz Replica](/images/digifiz_photo.jpg)
+This repository is intentionally a minimal product template. The firmware contains only:
 
-Digifiz Replica project code
+- continuous ADC sampling for the RPM and speed signal paths;
+- interrupt-driven frequency measurement for conditioned RPM and speed pulses;
+- a compact status protocol;
+- a Wi-Fi web interface with live input readings;
+- over-the-air (OTA) firmware installation.
 
-Digifiz Replica is a Digifiz replacement for Golf/ Jetta/ Scirocco cars of mk2 generation. The project is not an official Volkswagen product (actually, it is a completely new product), is a hobbyist product and just resembles the look of the device. Use it on your own risk!
+The dashboard/display, MFA, vehicle telemetry, lighting, buzzer, BLE, sleep, and legacy microcontroller implementations from the upstream project have been removed.
 
-Currently Audi Digifiz with Red and Green version is also supported. 
+## Repository layout
 
+```text
+ESP32/Ember/
+├── components/nvs_wifi_connect/  Wi-Fi provisioning component
+├── main/                         Ember application sources and web UI
+├── partitions.csv                OTA-capable partition table
+└── sdkconfig.defaults            ESP32 project defaults
+```
 
-Requirements for Atmega2580 version: Arduino IDE >1.8.13 (however it may work on previous versions)
-Board set to: "Arduino Mega/Atmega2560"
-Libraries: MD_MAX72xx (not needed anymore, please do not use it)
-RTClib(not by Neuron)
-SparkFun EEPROM library    
-Adafruit_BusIO
-MedianFilterLib2
+See [`ESP32/Ember/README.md`](ESP32/Ember/README.md) for wiring, setup, building, flashing, web API, and OTA instructions.
 
-Ctl+Shift+U for firmware upload using USBasp
+## Requirements
 
-![Digifiz Replica](/images/digifiz_next_photo.jpg)
+- Espressif ESP-IDF 5.2 or newer
+- A classic ESP32 target (not ESP32-S3)
+- `gzip`, used by the build to package the embedded web page
 
-Requirements for ESP32 version:
+## Quick start
 
-ESP32-IDF v5.2.1
+```bash
+cd ESP32/Ember
+idf.py set-target esp32
+idf.py build
+idf.py -p /dev/ttyUSB0 flash monitor
+```
 
-
-
-## Digifiz Replica information
-
-As tens of units were already dispatched some info should be here. 
-The project itself started in 2021 and many units were sold to Russia and abroad(mainly to USA, Germany, UK, Italy and other countries from EU)
-
-Original Russian community for Digifiz Replica: https://vk.com/digifiz
-Mirror (also on RU language) in Telegram with news and so on: https://t.me/digifiz
-English versions of communities and chat are coming soon and also will be in Telegram. 
-
-Currently (2023) firmware supports such cars as:
-
-- **Volkswagen Jetta Mk2 (1984-1992)** both CE1/CE2
-- **Volkswagen Golf Mk2 (1983-1992)** both CE1/CE2
-- **Volkswagen Passat B2 (1984-1992)** - not tested - should work
-- **Volkswagen Scirocco 2 (1984-1992)** - needs adapter for contacts
-
-- **Audi 80 B2 (1978–1986)** - both Red and Green Digifiz
-- **Audi 80 Coupe B2 (1980-1988)** - both Red and Green Digifiz
-
-More info in manual (see Docs)
-
-## Audi Digifiz
-
-Now Audi Digifiz Replicas are also supported. 
-Both Green and Red versions are working (see setup.h file):
-![Digifiz Replica Audi Red](/images/audi_red.jpg)
-![Digifiz Replica Audi Green](/images/audi_green.jpg)
-
-
-## Current roadmap
-
-- More precise fuel level measurement
-- More stable configuration
-- Compile through PlatformIO
-- Docs using Doxygen
-- Very far plans: mk2 hardware redesign, Golf 3, Audi 80 B3, AvtoVAZ dashboards 
-- LCD Digifiz
+On first boot, connect to the `Ember_AP` access point and configure Wi-Fi. Change the default provisioning password before deploying a device.
 
 ## License
 
-Digifiz Replica firmware is open source under MIT license. 
-Potential hardware files disclosure may be done on one of Open Hardware Licenses.
-Currently, hardware is closed source and is available for sale. 
-
-## Support us
-
-Paypal: sgw32nc@gmail.com
-Crypto: 
-0xeDc17cb23241eACe19DF3617291aa7d2d92E62DC (ETH, USDT ERC20)
-Buy something here (3d print and just 3d models):
-https://www.cgtrader.com/sgw32
-
-## Trademarks
-
-VDO is a Trademark of the Continental Corporation
-The Volkswagen logo, the word "Volkswagen," all Volkswagen vehicle names, and the Volkswagen advertising slogan are registered trademarks of Volkswagen AG
-AUDI is a trademark of AUDI AG
-AvtoVAZ is a trademark of AvtoVAZ Concern
-
-Any images or text of trademarks used on this site are for information purposes only.
-
-Digifiz Replica dashboards, as well as Digifiz Audi are replacement parts only for the respective cars, with OEM VAG numbers assigned:
-
-191 919 065 B / 191 919 019 B / 87001181 / 191 919 005 B / 191919065B
-191919033LR 616.051.2001 6160512001
-
-And Audi OEM part number:
-88481435
+Ember is distributed under the MIT License. See [`LICENSE.txt`](LICENSE.txt).

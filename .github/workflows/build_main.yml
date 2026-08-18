@@ -1,36 +1,16 @@
-name: Build Digifiz Next
-on: push
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-    - name: Set VERSION from tag or commit
-      run: |
-        git fetch --tags
-        export VERSION=$(git describe --tags --always --dirty=-dev)
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "Using build version: $VERSION"
-    - name: Replace BUILD_VERSION with version
-      run: |
-        sed -i "s/BUILD_VERSION/${VERSION}/g" ESP32/Digifiz/main/data/digifiz_ws_connect.html
-    - name: esp-idf build
-      uses: espressif/esp-idf-ci-action@v1.1.0
-      with:
-        esp_idf_version: v5.2.1
-        target: esp32s3
-        path: 'ESP32/Digifiz/'
-    - name: Collect Build Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: firmware
-        compression-level: 0  # Adjust for speed vs. size (0 = fastest, 9 = smallest)
-        if-no-files-found: error  # Fails if no firmware is generated
-        path: |
-          ESP32/Digifiz/build/*.bin
-          ESP32/Digifiz/build/bootloader/*.bin
-          ESP32/Digifiz/build/partition_table/*.bin
-          ESP32/Digifiz/build/*.elf
+# Ember firmware build (temporarily disabled while the project template is established).
+#
+# name: Build Ember
+# on:
+#   push:
+#   pull_request:
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: espressif/esp-idf-ci-action@v1
+#         with:
+#           esp_idf_version: v5.2.1
+#           target: esp32
+#           path: ESP32/Ember
